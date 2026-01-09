@@ -146,3 +146,21 @@
     @apply bg-neutral-800 rounded-full hover:bg-primary/50 transition-colors;
   }
 }
+
+@keyframes smoke-drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate3d(-50px, -100px, 0) rotate(2deg);
+  }
+}
+
+.animate-smoke-slow {
+  animation: smoke-drift 60s linear infinite alternate;
+}
+
+.animate-smoke-medium {
+  animation: smoke-drift 45s linear infinite alternate-reverse;
+}

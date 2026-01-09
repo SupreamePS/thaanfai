@@ -3,33 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-
-const FEATURES = [
-    {
-        id: "experience",
-        title: "Chef's Table",
-        subtitle: "Intimate Dining",
-        description: "Experience the fire up close. A 12-course tasting menu prepared right in front of you by our head chef.",
-        image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop", // Chef cooking
-        action: "Reserve Seats"
-    },
-    {
-        id: "catering",
-        title: "Catering",
-        subtitle: "Private Events",
-        description: "Bring the Thaanfai experience to your home or venue. Full-service charcoal grill catering for any occasion.",
-        image: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=800&auto=format&fit=crop", // Banquet/Catering
-        action: "Inquire Now"
-    },
-    {
-        id: "events",
-        title: "Private Events",
-        subtitle: "Celebrate with Us",
-        description: "Host your celebration at Thaanfai. Private rooms available for groups of 10 to 50 guests.",
-        image: "https://images.unsplash.com/photo-1519671482538-5810a2d7031c?q=80&w=800&auto=format&fit=crop", // Party/Event
-        action: "Book Room"
-    }
-];
+import { FEATURES_DATA } from "@/lib/constants/home";
 
 export default function FeaturesGrid() {
     return (
@@ -37,7 +11,7 @@ export default function FeaturesGrid() {
             <div className="container px-4">
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {FEATURES.map((feature, idx) => (
+                    {FEATURES_DATA.map((feature, idx) => (
                         <motion.div
                             key={feature.id}
                             initial={{ opacity: 0, y: 30 }}

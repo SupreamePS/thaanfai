@@ -2,6 +2,8 @@
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
   "/about/page": "/about",
+  "/admin/page": "/admin",
+  "/book-table/page": "/book-table",
   "/favicon.ico/route": "/favicon.ico",
   "/page": "/"
 }

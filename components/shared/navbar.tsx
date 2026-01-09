@@ -5,6 +5,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { NAV_LINKS } from "@/lib/constants/navigation";
+import { SECTION_HEADERS } from "@/lib/constants";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -15,13 +17,7 @@ export default function Navbar() {
         setScrolled(latest > 50);
     });
 
-    const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "Menu", href: "#menu" },
-        { name: "Experience", href: "#experience" },
-        { name: "About", href: "/about" },
-        { name: "Locations", href: "#locations" },
-    ];
+    const navLinks = NAV_LINKS;
 
     return (
         <motion.header
@@ -55,14 +51,14 @@ export default function Navbar() {
                         </Link>
                     ))}
                     <Link
-                        href="#reservations"
+                        href="/book-table"
                         className={cn(
                             "px-6 py-2.5 rounded-full text-sm font-semibold transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95",
                             "bg-primary text-primary-foreground border border-primary/20",
                             "shadow-[0_0_20px_-5px_var(--color-primary)]/50" // Glowing effect
                         )}
                     >
-                        Book a Table
+                        {SECTION_HEADERS.nav.bookTable}
                     </Link>
                 </nav>
 
@@ -93,7 +89,7 @@ export default function Navbar() {
                             </Link>
                         ))}
                         <Link
-                            href="#reservations"
+                            href="/book-table"
                             className="px-8 py-3 rounded-full bg-primary text-primary-foreground text-lg font-semibold mt-4"
                             onClick={() => setMobileMenuOpen(false)}
                         >
