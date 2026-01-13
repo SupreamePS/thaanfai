@@ -1,17 +1,20 @@
 package main
 
 import (
+	"log"
 	"net/http"
-	"sync"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // Booking represents a reservation.
 type Booking struct {
-	ID        string `json:"id"`
+	ID        uint   `json:"id" gorm:"primaryKey"`
 	Timestamp string `json:"timestamp"`
 	Branch    string `json:"branch" binding:"required"`
 	Date      string `json:"date" binding:"required"`
@@ -23,12 +26,29 @@ type Booking struct {
 	Status    string `json:"status"`
 }
 
-var (
-	bookings []Booking
-	mu       sync.RWMutex
-)
+var db *gorm.DB
 
 func main() {
+	var err error
+	// Try connecting with current user first
+	dsn := "host=localhost user=" + os.Getenv("USER") + " dbname=ecommerce port=5432 sslmode=disable"
+
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		// Fallback to 'postgres' user
+		log.Println("Failed to connect as current user, trying 'postgres'...", err)
+		dsn = "host=localhost user=postgres dbname=ecommerce port=5432 sslmode=disable"
+		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+		if err != nil {
+			log.Fatal("Failed to connect to database:", err)
+		}
+	}
+
+	// Auto Migrate the schema
+	if err := db.AutoMigrate(&Booking{}); err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+
 	r := gin.Default()
 
 	// CORS configuration
@@ -54,24 +74,21 @@ func createBooking(c *gin.Context) {
 	}
 
 	// Set server-side fields
-	newBooking.ID = time.Now().Format("20060102150405") // Simple ID
 	newBooking.Timestamp = time.Now().Format(time.RFC3339)
 	newBooking.Status = "pending"
 
-	mu.Lock()
-	bookings = append([]Booking{newBooking}, bookings...) // Prepend
-	mu.Unlock()
+	if result := db.Create(&newBooking); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
 	c.JSON(http.StatusCreated, newBooking)
 }
 
 func getBookings(c *gin.Context) {
-	mu.RLock()
-	defer mu.RUnlock()
-
-	// Return empty slice instead of null if empty
-	if bookings == nil {
-		c.JSON(http.StatusOK, []Booking{})
+	var bookings []Booking
+	if result := db.Find(&bookings); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
 
