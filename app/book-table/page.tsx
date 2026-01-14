@@ -15,7 +15,7 @@ export default function BookTablePage() {
             <section className="relative h-[40vh] min-h-[400px] w-full overflow-hidden flex items-center justify-center">
                 {/* Background */}
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-neutral-900 bg-[url('/images/beef_pic.jpg')] bg-cover bg-center" />
+                    <div className="absolute inset-0 bg-neutral-900 bg-[url('/images/thaanfai_rest.jpg')] bg-cover bg-center" />
                     <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-black/60" />
                 </div>
