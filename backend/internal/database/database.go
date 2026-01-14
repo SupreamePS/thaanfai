@@ -1,41 +1,35 @@
 package database
 
 import (
-	"backend/internal/models"
+	"context"
 	"log"
 	"os"
+	"time"
 
-	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var DB *gorm.DB
+var DB *pgxpool.Pool
 
 func InitDB() {
-	// Load .env file
-	// We look for .env in the root directory (../.env relative to backend/, or just .env if running from root)
-	// Since we are running from backend/, we try to load from parent directory or current
-	if err := godotenv.Load("../.env"); err != nil {
-		log.Println("No .env file found in parent directory, checking current directory")
-		if err := godotenv.Load(); err != nil {
-			log.Println("No .env file found")
-		}
-	}
-
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
-	}
-
-	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	config, err := pgxpool.ParseConfig(os.Getenv("DATABASE_URL"))
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatal(err)
 	}
 
-	// Auto Migrate the schema
-	if err := DB.AutoMigrate(&models.Booking{}); err != nil {
-		log.Fatal("Failed to migrate database:", err)
+	config.MaxConns = 5
+	config.MinConns = 1
+	config.MaxConnLifetime = time.Hour
+
+	pool, err := pgxpool.NewWithConfig(context.Background(), config)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	if err := pool.Ping(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+
+	DB = pool
+	log.Println("Connected to Neon PostgreSQL")
 }
