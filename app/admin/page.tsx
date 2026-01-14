@@ -38,7 +38,7 @@ export default function AdminPage() {
 
     const loadReservations = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/bookings');
+            const res = await fetch('/api/bookings');
             if (res.ok) {
                 const data = await res.json();
                 setReservations(data);

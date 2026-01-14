@@ -1,4 +1,4 @@
-package models
+package internal
 
 type Booking struct {
 	ID        uint   `json:"id" gorm:"primaryKey"`
