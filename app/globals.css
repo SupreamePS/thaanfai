@@ -55,9 +55,9 @@
   --background: oklch(0.08 0.02 260);
   --foreground: oklch(0.97 0 0);
 
-  /* Gold/Copper Primary */
-  --primary: oklch(0.70 0.16 70);
-  --primary-foreground: oklch(0.1 0.05 70);
+  /* Vibrant Orange Primary */
+  --primary: oklch(0.65 0.22 45);
+  --primary-foreground: oklch(0.985 0 0);
 
   /* Charcoal/Ash Secondary */
   --secondary: oklch(0.25 0.02 0);

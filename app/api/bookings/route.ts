@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { sendBookingEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
     try {
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
 
         // Server-side validation could go here
         const timestamp = new Date().toISOString();
-        const status = 'pending';
+        const status = 'confirmed';
 
         const query = `
       INSERT INTO bookings (timestamp, branch, date, time, guests, name, phone, email, status)
@@ -21,7 +22,21 @@ export async function POST(request: Request) {
         const client = await pool.connect();
         try {
             const result = await client.query(query, values);
-            return NextResponse.json({ id: result.rows[0].id }, { status: 201 });
+            const bookingId = result.rows[0].id;
+
+            // Send confirmation email asynchronously (don't block response)
+            sendBookingEmail({
+                id: bookingId,
+                name,
+                email,
+                date,
+                time,
+                guests,
+                branch,
+                phone
+            }).catch(err => console.error("Failed to send email:", err));
+
+            return NextResponse.json({ id: bookingId }, { status: 201 });
         } finally {
             client.release();
         }

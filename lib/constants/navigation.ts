@@ -24,7 +24,7 @@ export const FOOTER_LOCATIONS = [
 export const FOOTER_CONTACT = [
     { type: "Liabduan Phone", value: "098 529 4032 (Liabduan)", icon: Phone },
     { type: "Rama 9 Phone", value: "092 765 5880 (Rama 9)", icon: Phone },
-    { type: "Email", value: "reservations@thaanfai.com", icon: Mail }
+    { type: "Email", value: "thaanfai.bkk@gmail.com", icon: Mail }
 ];
 
 export const FOOTER_HOURS = {

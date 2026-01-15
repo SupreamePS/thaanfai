@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/shared/navbar";
 import Hero from "@/components/shared/hero";
 import MenuSection from "@/components/shared/home/menu-section";
+import GallerySection from "@/components/shared/home/gallery-section";
 import FeaturesGrid from "@/components/shared/home/features-grid";
 import LocationFooter from "@/components/shared/footer/location-footer";
 
@@ -31,6 +32,9 @@ export default function HomePage() {
           ))}
         </motion.p>
       </section>
+
+      {/* Gallery */}
+      <GallerySection />
 
       {/* Menu Section */}
       <MenuSection />
